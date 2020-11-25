@@ -1,12 +1,12 @@
-import { getManager } from "typeorm";
-import { Post } from "../entity/Post";
+import { prisma } from "../prisma";
 
 // GET /post/:postId
 export async function getPostByIdAction(req, res) {
-  const { postId } = req.params
-  const postRepository = getManager().getRepository(Post);
+  const { postId } = req.params;
 
-  const post = await postRepository.findOne(postId);
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+  });
 
   res.send(post);
 }

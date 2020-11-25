@@ -1,5 +1,4 @@
-import { getManager } from "typeorm";
-import { User } from "../entity/User";
+import { prisma } from "../prisma";
 
 // POST /user
 //
@@ -7,14 +6,14 @@ import { User } from "../entity/User";
 // name: string  – optional
 // email: string – required
 export async function createUserAction(req, res) {
-  const { name, email } = req.body
+  const { name, email } = req.body;
 
-  const userRepository = getManager().getRepository(User);
-
-  const newUser = new User()
-  newUser.name = name
-  newUser.email = email
-  userRepository.save(newUser)
+  const newUser = await prisma.user.create({
+    data: {
+      name,
+      email,
+    },
+  });
 
   res.send(newUser);
 }
