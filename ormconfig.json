@@ -1,0 +1,25 @@
+{
+   "type": "postgres",
+   "host": "localhost",
+   "port": 5432,
+   "username": "nikolasburk",
+   "password": "nikolasburk",
+   "database": "blog-typeorm",
+   "synchronize": false,
+   "logging": true,
+   "entities": [
+      "src/entity/**/*.ts"
+   ],
+   "migrationsTableName": "_typeorm_migrations",
+   "migrations": [
+      "src/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+   }
+}
