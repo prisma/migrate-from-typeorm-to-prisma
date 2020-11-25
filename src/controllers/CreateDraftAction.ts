@@ -1,6 +1,4 @@
-import { getManager } from "typeorm";
-import { Post } from "../entity/Post";
-import { User } from "../entity/User";
+import { prisma } from "../prisma";
 
 // POST /post
 //
@@ -9,18 +7,17 @@ import { User } from "../entity/User";
 // content: string – optional
 // authorEmail: string – required
 export async function createDraftAction(req, res) {
-  const { title, content, authorEmail } = req.body
+  const { title, content, authorEmail } = req.body;
 
-  const userRepository = getManager().getRepository(User);
-  const user = await userRepository.findOne({ email: authorEmail })
-
-  const postRepository = getManager().getRepository(Post);
-
-  const newPost = new Post()
-  newPost.title = title
-  newPost.content = content
-  newPost.author = user
-  postRepository.save(newPost)
+  const newPost = await prisma.post.create({
+    data: {
+      title,
+      content,
+      author: {
+        connect: { email: authorEmail },
+      },
+    },
+  });
 
   res.send(newPost);
 }

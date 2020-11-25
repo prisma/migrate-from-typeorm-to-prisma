@@ -1,13 +1,10 @@
-import { Request, Response } from "express";
-import { getManager } from "typeorm";
-import { Post } from "../entity/Post";
+import { prisma } from "../prisma";
 
 // GET /feed
-export async function feedAction(request: Request, response: Response) {
-  const postRepository = getManager().getRepository(Post);
-
-  const publishedPosts = await postRepository.find({
+export async function feedAction(request, response) {
+  const publishedPosts = await prisma.post.findMany({
     where: { published: true },
+    include: { author: true },
   });
 
   response.send(publishedPosts);

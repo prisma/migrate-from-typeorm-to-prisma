@@ -1,20 +1,19 @@
-import { getManager, Like } from "typeorm";
-import { Post } from "../entity/Post";
-
+import { prisma } from "../prisma";
 
 // GET /filterPosts
 //
 // query string
 // searchString: string - optional
 export async function filterPostsAction(req, res) {
-  const { searchString } = req.query
-  const postRepository = getManager().getRepository(Post);
+  const { searchString } = req.query;
 
-  const filteredPosts = await postRepository.find({
-    where: [
-      { title: Like(`%${searchString}%`) },
-      { content: Like(`%${searchString}%`) },
-    ],
+  const filteredPosts = prisma.post.findMany({
+    where: {
+      OR: [
+        { title: { contains: searchString } },
+        { content: { contains: searchString } },
+      ],
+    },
   });
 
   res.send(filteredPosts);
